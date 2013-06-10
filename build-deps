@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/vars
+
+for DEP in $DEPS; do
+    DEP_LOWERCASE=`echo $DEP | tr [A-Z] [a-z]`
+    "`dirname $0`/build-$DEP_LOWERCASE" || exit $?
+done
+

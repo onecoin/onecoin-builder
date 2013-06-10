@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/vars
+
+function set_vars {
+    DEP=$1
+    DEP_BASENAME=$DEP"_BASENAME"
+    DEP_BASENAME=${!DEP_BASENAME}
+    DEP_DIR="$DEPS_DIR/$DEP_BASENAME"
+    DEP_TARBALL=$DEP"_TARBALL"
+    DEP_TARBALL=${!DEP_TARBALL}
+    DEP_SRC=$DEP"_SRC"
+    DEP_SRC=${!DEP_SRC}
+}
+
+function build {
+    if [ ! -d "$DEP_DIR" ] ; then
+        echo "Extracting $DEP_TARBALL"
+        case $DEP_TARBALL in
+            *tar.gz)
+                tar xzf "$DEPS_DIR/$DEP_TARBALL" -C "$DEPS_DIR" || exit $?
+                ;;
+            *tar.bz2)
+                tar xjf "$DEPS_DIR/$DEP_TARBALL" -C "$DEPS_DIR" || exit $?
+        esac
+    fi
+
+    if [ ! -f "$CHECK_FILE" ] ; then
+        build_script || exit 1
+    else
+        echo "$DEP_BASENAME is already built"
+    fi
+}
+

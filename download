@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+WGET_TIMEOUT=20
+WGET_TRIES=2
+
+mkdir -p "$DEPS_DIR"
+
+for DEP in $DEPS; do
+    set_vars $DEP
+    if [ -f "$DEPS_DIR/$DEP_TARBALL" ] ; then
+        echo "$DEP_TARBALL already exists"
+    else
+        wget --tries $WGET_TRIES --timeout $WGET_TIMEOUT -O "$DEPS_DIR/$DEP_TARBALL" $DEP_SRC || exit 1
+    fi
+done

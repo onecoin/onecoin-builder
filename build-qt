@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+set_vars QT
+
+CHECK_FILE="$DESP_DIR/qt/lib/libQtCore.a"
+
+function build_script {
+    cd "$DEP_DIR"
+    CONF_FILE=./mkspecs/unsupported/win32-g++-cross/qmake.conf
+    sed 's/i686-pc-mingw32-moc/moc/' -i $CONF_FILE
+    sed 's/i686-pc-mingw32-rcc/rcc/' -i $CONF_FILE
+    sed 's/i686-pc-mingw32-uic/uic/' -i $CONF_FILE
+    sed "s/i686-pc-mingw32-/$MINGW_BASENAME-/" -i $CONF_FILE
+    sed --posix "s|QMAKE_CFLAGS\t\t= -pipe|QMAKE_CFLAGS\t\t= -pipe -isystem $MINGW_PREFIX/include/ -frandom-seed=qtbuild|" -i $CONF_FILE
+    sed --posix 's/QMAKE_LFLAGS\t\t=/QMAKE_LFLAGS\t\t= -static -static-libgcc/' -i $CONF_FILE
+    sed 's/QMAKE_CXXFLAGS_EXCEPTIONS_ON = -fexceptions -mthreads/QMAKE_CXXFLAGS_EXCEPTIONS_ON = -fexceptions/' -i $CONF_FILE
+    sed 's/QMAKE_LFLAGS_EXCEPTIONS_ON = -mthreads/QMAKE_LFLAGS_EXCEPTIONS_ON = -lmingwthrd/' -i $CONF_FILE
+    mkdir -p "$DEPS_DIR/qt"
+    ./configure -prefix "$DEPS_DIR/qt" -confirm-license -release -opensource -static -no-qt3support -xplatform unsupported/win32-g++-cross -no-multimedia -no-audio-backend -no-phonon -no-phonon-backend -no-declarative -no-script -no-scripttools -no-javascript-jit -no-webkit -no-svg -no-xmlpatterns -no-sql-sqlite -no-nis -no-cups -no-dbus -no-gif -no-libtiff -no-opengl -nomake examples -nomake demos -nomake docs -no-feature-style-plastique -no-feature-style-cleanlooks -no-feature-style-motif -no-feature-style-cde -no-feature-style-windowsce -no-feature-style-windowsmobile -no-feature-style-s60 || exit $?
+    make || exit $?
+    make install || exit $?
+}
+
+build || exit $?
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+set_vars MINIUPNPC
+
+CHECK_FILE="$DEPS_DIR/miniupnpc/libminiupnpc.a"
+
+function build_script {
+    cd "$DEP_DIR"
+    sed -i 's/\twingenminiupnpcstrings \$/\twine \.\/wingenminiupnpcstrings \$/' Makefile.mingw
+    make -f Makefile.mingw init libminiupnpc.a AR="$MINGW_BASENAME-ar" CC="$MINGW_BASENAME-gcc" || exit $?
+    ln -sf "$DEP_DIR" "$DEPS_DIR/miniupnpc"
+}
+
+build || exit $?
+

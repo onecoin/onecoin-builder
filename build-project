@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/vars
+
+cd "$PROJECT_DIR"
+PATH="$DEPS_DIR/qt/bin":$PATH
+"$DEPS_DIR/qt/bin/qmake" -spec unsupported/win32-g++-cross \
+    MINIUPNPC_LIB_PATH="$DEPS_DIR/$MINIUPNPC_BASENAME" \
+    MINIUPNPC_INCLUDE_PATH="$DEPS_DIR" \
+    BDB_LIB_PATH="$DEPS_DIR/$BDB_BASENAME/build_unix" \
+    BDB_INCLUDE_PATH="$DEPS_DIR/$BDB_BASENAME/build_unix" \
+    BOOST_LIB_PATH="$DEPS_DIR/$BOOST_BASENAME/stage/lib" \
+    BOOST_INCLUDE_PATH="$DEPS_DIR/$BOOST_BASENAME" \
+    BOOST_LIB_SUFFIX=-mt \
+    BOOST_THREAD_LIB_SUFFIX=_win32-mt \
+    OPENSSL_LIB_PATH="$DEPS_DIR/$OPENSSL_BASENAME" \
+    OPENSSL_INCLUDE_PATH="$DEPS_DIR/$OPENSSL_BASENAME/include" \
+    USE_UPNP=1 \
+    INCLUDEPATH="$DEPS_DIR" \
+    DEFINES=BOOST_THREAD_USE_LIB \
+    QMAKE_LRELEASE=lrelease \
+    USE_BUILD_INFO=1 \
+    BITCOIN_NEED_QT_PLUGINS=1 \
+    RELEASE=1 || exit $?
+make || exit $?
+

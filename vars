@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+DEPS=("OPENSSL BDB MINIUPNPC BOOST QT")
+
+MINGW_BASENAME="i686-w64-mingw32"
+MINGW_PREFIX="/usr/$MINGW_BASENAME"
+
+WORKSPACE="`dirname \`readlink -f $0\``"
+DEPS_DIR="$WORKSPACE/deps"
+PROJECT_DIR="$WORKSPACE/onecoin"
+
+OPENSSL_BASENAME="openssl-1.0.1e"
+BDB_BASENAME="db-4.8.30.NC"
+MINIUPNPC_BASENAME="miniupnpc-1.8"
+BOOST_BASENAME="boost_1_53_0"
+QT_BASENAME="qt-everywhere-opensource-src-4.8.4"
+
+OPENSSL_TARBALL="$OPENSSL_BASENAME.tar.gz"
+BDB_TARBALL="$BDB_BASENAME.tar.gz"
+MINIUPNPC_TARBALL="$MINIUPNPC_BASENAME.tar.gz"
+BOOST_TARBALL="$BOOST_BASENAME.tar.bz2"
+QT_TARBALL="$QT_BASENAME.tar.gz"
+
+OPENSSL_SRC="http://www.openssl.org/source/$OPENSSL_TARBALL"
+BDB_SRC="http://download.oracle.com/berkeley-db/$BDB_TARBALL"
+MINIUPNPC_SRC="http://miniupnp.tuxfamily.org/files/download.php?file=$MINIUPNPC_TARBALL"
+BOOST_SRC="http://sourceforge.net/projects/boost/files/boost/1.53.0/$BOOST_TARBALL/download"
+QT_SRC="http://releases.qt-project.org/qt4/source/$QT_TARBALL"
+

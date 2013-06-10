@@ -1,0 +1,12 @@
+/deps
+
+# Temp files
+
+*~
+
+# IDE configs
+/.*
+
+# Do not ignore .gitignore itself
+!/.gitignore
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+set_vars OPENSSL
+
+CHECK_FILE="$DEP_DIR/libcrypto.a"
+
+function build_script {
+    cd "$DEP_DIR"
+    CROSS_COMPILE="$MINGW_BASENAME-" ./Configure mingw no-asm no-shared --prefix="$MINGW_PREFIX" || exit $?
+    make depend || exit $?
+    make || exit $?
+}
+
+build || exit $?
+

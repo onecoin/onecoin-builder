@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+set_vars BOOST
+
+CHECK_FILE="$DEP_DIR/stage/lib/libboost_system-mt.a"
+
+function build_script {
+    cd "$DEP_DIR"
+    ./bootstrap.sh --without-icu || exit $?
+    echo "using gcc : : $MINGW_BASENAME-g++ : <rc>$MINGW_BASENAME-windres  ;" > ./user-config.jam
+    ./bjam toolset=gcc target-os=windows threadapi=win32 threading=multi variant=release link=static --user-config=user-config.jam --without-mpi --without-python -sNO_BZIP2=1 -sNO_ZLIB=1 --layout=tagged --build-type=complete stage || exit $?
+    find ./stage/lib -name "*.a" | xargs i686-w64-mingw32-ranlib
+}
+
+build || exit $?
+

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source `dirname $0`/common
+
+set_vars BDB
+
+CHECK_FILE="$DEP_DIR/build_unix/libdb_cxx.a"
+
+function build_script {
+    cd "$DEP_DIR/build_unix"
+    ../dist/configure --enable-mingw --enable-cxx --host="$MINGW_BASENAME" CFLAGS="-I$MINGW_PREFIX/include" || exit $?
+    # sed -i "s,WinIoCtl.h,winioctl.h,g" "../src/dbinc/win_db.h" # Uncomment this if you wish to build db-5.3.21.NC
+    make || exit $?
+}
+
+build || exit $?
+
